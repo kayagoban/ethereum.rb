@@ -11,13 +11,14 @@ namespace :ethereum do
     end
 
     desc "Send"
-    task :send, [:address, :amount] do |_, args|
+    task :send, [:address, :amount, :gas] do |_, args|
       @client = Ethereum::Singleton.instance
       @formatter = Ethereum::Formatter.new
       address = @formatter.to_address(args[:address])
       value = @client.int_to_hex(@formatter.to_wei(args[:amount].to_f))
+      gas_value = @client.int_to_hex(@formatter.to_wei(args[:gas].to_f))
       puts "Transfer from: #{@client.default_account} to: #{address}, amount: #{value}wei"
-      pp @client.eth_send_transaction({from: @client.default_account, to: address, value: value})
+      pp @client.eth_send_transaction({from: @client.default_account, to: address, value: value, gas: gas_value})
     end
 
   end
